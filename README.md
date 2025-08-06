@@ -33,7 +33,7 @@ This project implements a multi-tier architecture with a .NET 8 Web API and Post
 
 ## 🔗 Links
 
-- **Code Repository**: https://github.com/AMARMATHUR/KubernetesAssignment.git
+- **Code Repository**: https://github.com/AMARMATHUR/KubernetesAssignment
 - **Docker Hub Image**: `amarmathur/employee-api:latest` 
 - **API Endpoint**: `http://employee-api.local/api/employees`
 - **📋 Comprehensive Documentation**: [Assignment Documentation](docs/DOCUMENTATION.md)
