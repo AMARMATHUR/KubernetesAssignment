@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee-api-deployment
+  namespace: employee-system
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: employee-api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: employee-api
+    spec:
+      containers:
+      - name: employee-api
+        image: amarmathur/employee-api:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: employee-config
+              key: aspnetcore-environment
+        - name: ConnectionStrings__DefaultConnection
+          value: "Host=postgres-service;Database=employeedb;Username=postgres;Password=password"
+        - name: DATABASE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: employee-config
+              key: database-host
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: employee-config
+              key: database-name
+        - name: DATABASE_USER
+          valueFrom:
+            configMapKeyRef:
+              name: employee-config
+              key: database-user
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: employee-secret
+              key: database-password
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: employee-api-service
+  namespace: employee-system
+spec:
+  selector:
+    app: employee-api
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: ClusterIP

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: employee-config
+  namespace: employee-system
+data:
+  database-host: "postgres-service"
+  database-name: "employeedb"
+  database-user: "postgres"
+  aspnetcore-environment: "Production"
