@@ -125,12 +125,6 @@ data:
   database-user: "postgres"
 ```
 
-### Secret (k8s/secret.yaml)
-```yaml
-data:
-  database-password: cGFzc3dvcmQ= # base64 encoded
-```
-
 ## 📋 Testing Scenarios
 
 1. **API Access**: `curl http://employee-api.local/api/employees`
